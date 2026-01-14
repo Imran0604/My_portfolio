@@ -264,7 +264,10 @@ body {
     align-items: center;
 }
 
-.avatar-container { text-align: center; }
+.avatar-container { 
+    text-align: center;
+    margin-top: 4rem;
+}
 
 .avatar-circle {
     /* Responsive sizing */

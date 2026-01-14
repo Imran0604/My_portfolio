@@ -13,7 +13,7 @@ window.addEventListener('scroll', () => {
 // --- TYPING EFFECT ---
 const textElement = document.getElementById('typing-text');
 const phrases = [
-    "Vibe Codder",
+    "Vibe Coder",
     "Web Developer",
     "Robotics & IoT Engineer",
     "I build smart systems",
