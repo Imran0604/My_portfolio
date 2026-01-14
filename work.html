@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Works | Imran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css"> 
+
+    <style>
+        /* --- PAGE SPECIFIC STYLES --- */
+        body { padding-top: 80px; }
+        
+        .detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .detail-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+        
+        .detail-header span { color: var(--neon-cyan); font-family: var(--font-code); }
+
+        /* --- NEON UNDERLINE STYLING --- */
+
+        /* 1. Make the H1 wrap tightly around the text so the line fits perfectly */
+        .detail-header .section-title {
+            position: relative; /* Needed for placing the line */
+            display: inline-block; /* Ensures the underline matches text width */
+            padding-bottom: 15px; /* Space between text and line */
+        }
+
+        /* 2. Create the Glowing Line */
+        .detail-header .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Center start point */
+            transform: translateX(-50%); /* Center alignment */
+            width: 80%; /* Length of the line (80% of text width looks stylish) */
+            height: 3px; /* Thickness of the line */
+            background: var(--neon-cyan); /* The core color */
+            border-radius: 50px; /* Rounded edges */
+            
+            /* The Neon Glow Effect */
+            box-shadow: 
+                0 0 10px var(--neon-cyan), 
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan);
+      }
+
+        .project-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            padding-bottom: 4rem;
+        }
+
+        /* PROJECT CARD DESIGN */
+        .project-card {
+            background: rgba(17, 17, 17, 0.85);
+            border: 1px solid #333;
+            border-top: 3px solid var(--neon-purple); /* Purple accent for projects */
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            transition: 0.3s ease;
+            
+            /* Animation Setup */
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(188, 19, 254, 0.15); /* Purple glow */
+            border-color: var(--neon-cyan);
+        }
+
+        /* Header Area of Card */
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(188, 19, 254, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-cyan);
+            font-size: 1.8rem;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .project-title h3 {
+            font-family: var(--font-main);
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .project-title span {
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Description Area */
+        .project-desc {
+            color: #bbb;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tags / Future Plans */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-badge {
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tech-badge i { color: var(--neon-purple); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Staggered Delay for items */
+        .project-card:nth-child(1) { animation-delay: 0.2s; }
+        .project-card:nth-child(2) { animation-delay: 0.4s; }
+        .project-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .back-btn-container { text-align: center; margin-top: 2rem; }
+        .back-btn {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-family: var(--font-code);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--neon-cyan); color: #000; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">&lt;Imran /&gt;</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <div class="detail-header">
+                <h1 class="section-title"><span>Project</span> Protocols</h1>
+            </div>
+
+            <div class="project-container">
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-helicopter"></i>
+                        </div>
+                        <div class="project-title">
+                            <span>BUP Robotics Club</span>
+                            <h3>Surveillance Drone X1</h3>
+                        </div>
+                    </div>
+                    <div class="project-desc">
+                        <p>
+                            Designed and built a functional Surveillance Drone entirely from scratch to support campus security. 
+                            Currently transmits <strong>live video footage</strong> for real-time situational awareness.
+                        </p>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-rocket"></i> Future: Auto-Patrol</span>
+                        <span class="tech-badge"><i class="fas fa-fire"></i> Fire Detection</span>
+                        <span class="tech-badge"><i class="fas fa-satellite-dish"></i> Ground Station</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="project-title">
+                            <span>Research Thesis</span>
+                            <h3>AI Phishing Detection</h3>
+                        </div>
+                    </div>
+                    <div class="project-desc">
+                        <p>
+                            Deploying distilled AI models for email phishing detection. We are innovating a model 
+                            that is <strong>faster and more efficient</strong> than TinyBERT, optimized for edge deployment.
+                        </p>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-brain"></i> Distilled AI</span>
+                        <span class="tech-badge"><i class="fas fa-envelope"></i> Cybersecurity</span>
+                        <span class="tech-badge"><i class="fas fa-tachometer-alt"></i> High Performance</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="project-title">
+                            <span>IoT Systems</span>
+                            <h3>Smart Roof-top Farming</h3>
+                        </div>
+                    </div>
+                    <div class="project-desc">
+                        <p>
+                            An "Automated AI-based Roof-top farming project." Uses sensors to monitor soil moisture 
+                            and environmental conditions, automatically managing water and nutrients for urban agriculture.
+                        </p>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-badge"><i class="fas fa-wifi"></i> IoT</span>
+                        <span class="tech-badge"><i class="fas fa-cloud"></i> Cloud Data</span>
+                        <span class="tech-badge"><i class="fas fa-robot"></i> Automation</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="back-btn-container">
+                <a href="index.html" class="back-btn">&larr; Return to Main System</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+    <script>
+        const config = {
+            background: { color: { value: "#050505" } },
+            particles: {
+                number: { value: 30 },
+                color: { value: "#bc13fe" }, /* Purple particles for this page */
+                shape: { type: "circle" },
+                opacity: { value: 0.3 },
+                size: { value: 2 },
+                move: { enable: true, speed: 0.6 },
+                links: { enable: true, opacity: 0.1, color: "#bc13fe" }
+            }
+        };
+        tsParticles.load("tsparticles", config);
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hobbies | Imran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css"> 
+
+    <style>
+        /* --- PAGE SPECIFIC STYLES --- */
+        body { padding-top: 80px; }
+        
+        .detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        /* Title Styling */
+        .detail-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        /* Neon Underline */
+        .detail-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 3px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            border-radius: 50px;
+        }
+        
+        .detail-header span { color: var(--neon-purple); font-family: var(--font-code); }
+
+        .hobby-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive Grid */
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* HOBBY CARD DESIGN */
+        .hobby-card {
+            background: rgba(17, 17, 17, 0.85);
+            border: 1px solid #333;
+            border-bottom: 3px solid var(--neon-cyan);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            transition: 0.3s ease;
+            
+            /* Animation Init */
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Icons */
+        .hobby-icon {
+            font-size: 3rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .hobby-card:hover .hobby-icon {
+            color: var(--neon-purple);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .hobby-card h3 {
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            font-family: var(--font-main);
+        }
+
+        .hobby-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Staggered Delay */
+        .hobby-card:nth-child(1) { animation-delay: 0.2s; }
+        .hobby-card:nth-child(2) { animation-delay: 0.4s; }
+        .hobby-card:nth-child(3) { animation-delay: 0.6s; }
+        .hobby-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .back-btn-container { text-align: center; margin-top: 2rem; }
+        .back-btn {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-family: var(--font-code);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--neon-cyan); color: #000; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">&lt;Imran /&gt;</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <div class="detail-header">
+                <h1 class="section-title">Off-Duty <span>Protocols</span></h1>
+            </div>
+
+            <div class="hobby-grid">
+                
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>IoT Innovation</h3>
+                    <p>Researching and prototyping smart systems. I love experimenting with new sensors and automation logic.</p>
+                </div>
+
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-baseball-bat-ball"></i></div>
+                    <h3>Cricket</h3>
+                    <p>Active player and enthusiast. Strategy on the field translates to strategy in code.</p>
+                </div>
+
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-bicycle"></i></div>
+                    <h3>Cycling</h3>
+                    <p>Exploring the city on two wheels. It keeps the mind clear and the energy high.</p>
+                </div>
+
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-plane-departure"></i></div>
+                    <h3>Travelling</h3>
+                    <p>Discovering new places and cultures. Every journey brings a fresh perspective.</p>
+                </div>
+
+            </div>
+
+            <div class="back-btn-container">
+                <a href="index.html" class="back-btn">&larr; Return to Main System</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+    <script>
+        const config = {
+            background: { color: { value: "#050505" } },
+            particles: {
+                number: { value: 20 },
+                color: { value: ["#00f3ff", "#bc13fe"] }, /* Cyan and Purple mix */
+                shape: { type: "circle" },
+                opacity: { value: 0.4 },
+                size: { value: { min: 2, max: 4 } },
+                move: { enable: true, speed: 1, direction: "top", outModes: "out" } /* Floating upwards like bubbles */
+            }
+        };
+        tsParticles.load("tsparticles", config);
+    </script>
+</body>
+</html>

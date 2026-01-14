@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education | Imran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css"> 
+
+    <style>
+        /* --- PAGE SPECIFIC STYLES --- */
+        body { padding-top: 80px; } /* Space for fixed navbar */
+        
+        .detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .detail-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+        
+        .detail-header span { color: var(--neon-cyan); font-family: var(--font-code); }
+
+        /* --- NEON UNDERLINE STYLING --- */
+
+        /* 1. Make the H1 wrap tightly around the text so the line fits perfectly */
+        .detail-header .section-title {
+            position: relative; /* Needed for placing the line */
+            display: inline-block; /* Ensures the underline matches text width */
+            padding-bottom: 15px; /* Space between text and line */
+        }
+
+        /* 2. Create the Glowing Line */
+        .detail-header .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Center start point */
+            transform: translateX(-50%); /* Center alignment */
+            width: 80%; /* Length of the line (80% of text width looks stylish) */
+            height: 3px; /* Thickness of the line */
+            background: var(--neon-cyan); /* The core color */
+            border-radius: 50px; /* Rounded edges */
+            
+            /* The Neon Glow Effect */
+            box-shadow: 
+                0 0 10px var(--neon-cyan), 
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan);
+        }
+
+        .education-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* The Education Card */
+        .edu-card {
+            background: rgba(17, 17, 17, 0.85);
+            border: 1px solid #333;
+            border-left: 4px solid var(--neon-cyan); /* Neon Accent */
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .edu-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+            border-color: var(--neon-cyan);
+        }
+
+        /* Logo Area */
+        .edu-logo {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background: #fff; /* White bg for logos to pop */
+            border-radius: 50%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        .edu-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 35%;
+        }
+
+        /* Text Area */
+        .edu-details h3 {
+            color: var(--neon-cyan);
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .degree {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .stats span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats i { color: var(--neon-purple); }
+
+        .highlight-grade {
+            color: #fff;
+            background: var(--neon-purple);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .back-btn-container { text-align: center; margin-top: 2rem; }
+        
+        .back-btn {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-family: var(--font-code);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        
+        .back-btn:hover { background: var(--neon-cyan); color: #000; }
+
+        /* --- ANIMATION EFFECTS --- */
+        @keyframes loadCard {
+            0% {
+                opacity: 0;
+                transform: translateY(30px); /* Start slightly lower */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0); /* End in correct position */
+            }
+        }
+
+        /* 2. Apply Animation to the Cards */
+        .edu-card {
+            opacity: 0; /* Hidden initially so they can fade in */
+            animation: loadCard 0.8s ease-out forwards;
+        }
+
+        /* 3. Stagger the timing (The "Cascade" Effect) */
+        /* This makes them appear one after another */
+        .education-container .edu-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .education-container .edu-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .education-container .edu-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        /* 4. Add a "Pulse" effect to the border on Hover */
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 5px var(--neon-cyan); }
+            50% { box-shadow: 0 0 20px var(--neon-cyan), 0 0 10px var(--neon-purple); }
+            100% { box-shadow: 0 0 5px var(--neon-cyan); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .edu-card { flex-direction: column; text-align: center; }
+            .stats { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">&lt;Imran /&gt;</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <div class="detail-header">
+                <h1 class="section-title"><span>Academic</span> History</h1>
+            </div>
+
+            <div class="education-container">
+                
+                <div class="edu-card">
+                    <div class="edu-logo">
+                        <img src="images/bup-logo.png" alt="BUP Logo">
+                    </div>
+                    <div class="edu-details">
+                        <h3>Bangladesh University of Professionals</h3>
+                        <div class="degree">B.Sc. in Information & Communication Engineering</div>
+                        <div class="stats">
+                            <span><i class="far fa-calendar-alt"></i> July 2022 - Present</span>
+                            <span><i class="fas fa-chart-line"></i> CGPA: <span class="highlight-grade">3.41</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-logo">
+                        <img src="images/acc-logo.png" alt="Adamjee Cantonment College Logo">
+                    </div>
+                    <div class="edu-details">
+                        <h3>Adamjee Cantonment College</h3>
+                        <div class="degree">Higher Secondary Certificate (HSC)</div>
+                        <div class="stats">
+                            <span><i class="far fa-calendar-check"></i> Passed: 2020</span>
+                            <span><i class="fas fa-star"></i> GPA: <span class="highlight-grade">5.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-logo">
+                        <img src="images/acps-logo.png" alt="Adamjee Cantonment Public School Logo">
+                    </div>
+                    <div class="edu-details">
+                        <h3>Adamjee Cantonment Public School</h3>
+                        <div class="degree">Secondary School Certificate (SSC)</div>
+                        <div class="stats">
+                            <span><i class="far fa-calendar-check"></i> Passed: 2018</span>
+                            <span><i class="fas fa-star"></i> GPA: <span class="highlight-grade">5.00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="back-btn-container">
+                <a href="index.html" class="back-btn">&larr; Return to Main System</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+    <script>
+        const config = {
+            background: { color: { value: "#050505" } },
+            particles: {
+                number: { value: 30 },
+                color: { value: "#00f3ff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.2 },
+                size: { value: 2 },
+                move: { enable: true, speed: 0.5 },
+                links: { enable: true, opacity: 0.1, color: "#00f3ff" }
+            }
+        };
+        tsParticles.load("tsparticles", config);
+    </script>
+</body>
+</html>

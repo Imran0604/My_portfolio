@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning | Imran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css"> 
+
+    <style>
+        /* --- PAGE SPECIFIC STYLES --- */
+        body { padding-top: 80px; }
+        
+        .detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        /* Neon Underline Title */
+        .detail-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .detail-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            border-radius: 50px;
+        }
+        
+        .detail-header span { color: var(--neon-purple); font-family: var(--font-code); }
+
+        .learning-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* LEARNING CARD DESIGN */
+        .learn-card {
+            background: rgba(17, 17, 17, 0.85);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .learn-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Header: Icon + Title */
+        .learn-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .learn-icon {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 243, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .learn-title h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            font-family: var(--font-main);
+        }
+
+        .learn-title p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-code);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            align-self: flex-start;
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: rgba(188, 19, 254, 0.1);
+            color: var(--neon-purple);
+            border: 1px solid var(--neon-purple);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Blink Animation for the dot */
+        .blink-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-purple);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* Fake Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #222;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            width: 40%; /* Default width */
+            position: relative;
+        }
+
+        /* Moving shimmer effect on progress bar */
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg, 
+                rgba(255, 255, 255, 0.2) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.2) 75%, 
+                transparent 75%, 
+                transparent
+            );
+            background-size: 20px 20px;
+            animation: moveStripe 1s linear infinite;
+        }
+
+        @keyframes moveStripe { 0% { background-position: 0 0; } 100% { background-position: 20px 20px; } }
+
+        .back-btn-container { text-align: center; margin-top: 2rem; }
+        .back-btn {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-family: var(--font-code);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--neon-cyan); color: #000; }
+
+        /* --- ENTRANCE ANIMATIONS --- */
+
+        /* 1. Define the Slide Up Motion */
+        @keyframes systemLoad {
+            0% {
+                opacity: 0;
+                transform: translateY(30px); /* Start lower */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0); /* End in place */
+            }
+        }
+
+        /* 2. Apply to Learning Cards */
+        .learn-card {
+            opacity: 0; /* Hidden at first */
+            animation: systemLoad 0.8s ease-out forwards;
+        }
+
+        /* 3. Stagger the timing (The "Cascade" Effect) */
+        .learn-card:nth-child(1) { animation-delay: 0.2s; } /* DSA loads first */
+        .learn-card:nth-child(2) { animation-delay: 0.4s; } /* Python loads second */
+        .learn-card:nth-child(3) { animation-delay: 0.6s; } /* React Native loads third */
+        .learn-card:nth-child(4) { animation-delay: 0.8s; } /* MySQL loads last */
+
+        /* 4. Add a Glitch/Pulse Effect on Hover */
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 5px var(--neon-cyan); }
+            50% { box-shadow: 0 0 20px var(--neon-cyan), 0 0 10px var(--neon-purple); }
+            100% { box-shadow: 0 0 5px var(--neon-cyan); }
+        }
+
+
+
+        @media (max-width: 600px) {
+            .learning-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">&lt;Imran /&gt;</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <div class="detail-header">
+                <h1 class="section-title">Learning <span>Advanced</span></h1>
+            </div>
+
+            <div class="learning-grid">
+                
+                <div class="learn-card">
+                    <div class="learn-header">
+                        <div class="learn-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="learn-title">
+                            <h3>Data Structures</h3>
+                            <p>Advanced Algorithms</p>
+                        </div>
+                    </div>
+                    <div class="status-badge">
+                        <div class="blink-dot"></div> Processing Logic...
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width: 60%"></div></div>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-header">
+                        <div class="learn-icon"><i class="fab fa-python"></i></div>
+                        <div class="learn-title">
+                            <h3>Python</h3>
+                            <p>AI & Backend Automation</p>
+                        </div>
+                    </div>
+                    <div class="status-badge">
+                        <div class="blink-dot"></div> Compiling Modules...
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width: 75%"></div></div>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-header">
+                        <div class="learn-icon"><i class="fab fa-react"></i></div>
+                        <div class="learn-title">
+                            <h3>React Native</h3>
+                            <p>Cross-Platform Mobile Dev</p>
+                        </div>
+                    </div>
+                    <div class="status-badge">
+                        <div class="blink-dot"></div> Building UI...
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width: 60%"></div></div>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-header">
+                        <div class="learn-icon"><i class="fas fa-database"></i></div>
+                        <div class="learn-title">
+                            <h3>MySQL Advanced</h3>
+                            <p>Optimization & Indexing</p>
+                        </div>
+                    </div>
+                    <div class="status-badge">
+                        <div class="blink-dot"></div> Optimizing Queries...
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width: 50%"></div></div>
+                </div>
+
+            </div>
+
+            <div class="back-btn-container">
+                <a href="index.html" class="back-btn">&larr; Return to Main System</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
+    <script>
+        const config = {
+            background: { color: { value: "#050505" } },
+            particles: {
+                number: { value: 25 },
+                color: { value: "#ffffff" }, /* White clean dust for learning */
+                shape: { type: "circle" },
+                opacity: { value: 0.2 },
+                size: { value: 1 },
+                move: { enable: true, speed: 0.3, direction: "top" } /* Rising bubbles effect */
+            }
+        };
+        tsParticles.load("tsparticles", config);
+    </script>
+</body>
+</html>
