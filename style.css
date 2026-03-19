@@ -209,9 +209,9 @@ body {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 243, 255, 0.2);
     
-    /* VITAL for stacking text correctly */
-    display: flex;
-    flex-direction: column; 
+    /* THESE 4 LINES FIX THE PROBLEM */
+    display: flex !important;
+    flex-direction: column !important; 
     align-items: center;
     justify-content: center;
 }
@@ -399,6 +399,20 @@ body {
    ========================================= */
 #toolbox, #contact { padding: 5rem 0; text-align: center; }
 
+.tool-category {
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.tool-category-title {
+    color: var(--neon-purple);
+    font-family: var(--font-code);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(188, 19, 254, 0.3);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
 .toolbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1.5rem; justify-items: center; }
 .tool-card {
     background: var(--bg-card); width: 100%; padding: 1.5rem 0.5rem;

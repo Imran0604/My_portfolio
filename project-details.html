@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details | Imran</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        body { padding-top: 100px; }
+        .detail-wrapper { max-width: 900px; margin: 0 auto; background: var(--bg-card); padding: 3rem; border-radius: 12px; border: 1px solid #333; }
+        .detail-title { color: var(--neon-cyan); font-family: var(--font-code); font-size: 2rem; margin-bottom: 1rem; text-align: center;}
+        .detail-desc { color: #ccc; line-height: 1.8; margin-bottom: 2rem; font-size: 1.1rem; }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; margin-bottom: 2rem; border: 2px solid var(--neon-purple); display: none; /* Hidden by default */ }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        .extra-images { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .extra-images img { width: 100%; border-radius: 8px; border: 1px solid #444; transition: 0.3s; }
+        .extra-images img:hover { transform: scale(1.05); border-color: var(--neon-cyan); }
+        
+        .back-btn { color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 10px 20px; text-decoration: none; font-family: var(--font-code); display: inline-block; transition: 0.3s;}
+        .back-btn:hover { background: var(--neon-cyan); color: #000; }
+        
+        @media (max-width: 600px) { .extra-images { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar"><div class="container nav-container"><a href="index.html" class="nav-logo">&lt;Imran/&gt;</a></div></nav>
+
+    <div class="container">
+        <div class="detail-wrapper">
+            
+            <h1 class="detail-title" id="proj-title">Loading...</h1>
+            
+            <div class="tech-tags" id="proj-tags" style="justify-content: center; margin-bottom: 2rem;">
+                </div>
+
+            <div class="video-container" id="proj-video-container">
+                <iframe id="proj-video" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <p class="detail-desc" id="proj-desc">Loading project data...</p>
+
+            <h3 style="color: #fff; margin-bottom: 1rem; font-family: var(--font-code);">System Schematics</h3>
+            <div class="extra-images" id="proj-images">
+                </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="index.html" id="proj-back-btn" class="back-btn">&larr; Back to Projects</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // 1. THIS IS YOUR DATABASE. Add all your projects here.
+        const projectsDatabase = {
+            "maintenance": {
+                title: "BUP Maintenance Hub",
+                tags: ["Node.js", "Express", "MongoDB", "JWT", "Gemini API"],
+                video: "", // Add a youtube embed link here if you have a demo video
+                description: `BUP Maintenance HUB is an integrated maintenance management system tailored for the Bangladesh University of Professionals (BUP), aiming to digitize and optimize the entire lifecycle of campus maintenance issues. The platform allows users—including students, faculty, technicians, moderators, and administrators—to report, monitor, and resolve maintenance problems through a centralized web interface. 
+                
+                It features secure authentication, role-based dashboards, real-time notifications, and comprehensive analytics and reporting modules to support data-driven decision-making. By automating workflows and providing transparency, BUP Maintenance HUB enhances operational efficiency, accountability, and communication across the university's maintenance ecosystem.
+                <br><br>
+                <h3>Technologies Used</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Frontend:</strong> HTML, CSS, JavaScript, Chart.js</li>
+                    <li><strong>Backend:</strong> Node.js, Express.js</li>
+                    <li><strong>Database:</strong> MongoDB</li>
+                    <li><strong>Security & Auth:</strong> JWT, Bcryptjs</li>
+                    <li><strong>Integrations:</strong> Gemini API (AI Chatbot), Nodemailer, Multer, jsPDF</li>
+                </ul>
+                <br>
+                <h3>Core Features</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Role-Based Access:</strong> Secure BUP email registration with OTP verification. Custom dashboards for Students, Faculty, Technicians, and Admins.</li>
+                    <li><strong>Advanced Issue Tracking:</strong> Multi-field submission (priority, location, images) with real-time progress sliders and advanced filtering.</li>
+                    <li><strong>Admin & Technician Portals:</strong> Admins can assign tasks and view performance analytics. Technicians can update live status and manage schedules.</li>
+                    <li><strong>AI Chatbot:</strong> Integrated Gemini API provides a messenger-style interface to help users report issues and navigate the system.</li>
+                    <li><strong>Data & Analytics:</strong> Live dashboard metrics, graphical trend analysis (Bar/Line charts), and custom PDF report generation.</li>
+                    <li><strong>UI/UX:</strong> Fully responsive design with Dark Mode memory and an integrated campus map.</li>
+                </ul>`,
+                
+                // ADD YOUR IMAGE PATHS HERE
+                images: [
+                    "bmh/ui1.jpg", 
+                    "bmh/ui7.jpg", 
+                    "bmh/ui3.jpg",
+                    "bmh/ui4.jpg",
+                    "bmh/ui5.jpg",
+                    "bmh/ui8.jpg",
+                    "bmh/ui2.jpg", 
+                    "bmh/ui6.jpg"   
+                ],
+                backLink: "software-projects.html"
+            },
+            "drone": {
+                title: "Autonomous Surveillance Drone",
+                tags: ["Robotics", "IoT", "Telemetry", "Computer Vision", "C++"],
+                video: "", 
+                description: `<p>Designed and built a highly capable Surveillance Drone to support campus security and emergency response. Beyond standard flight capabilities, this drone operates as an autonomous aerial node, capturing and transmitting live environmental data to provide real-time situational awareness.</p>
+                
+                <h3 style="color: #bc13fe; margin-top: 2rem;">Core Capabilities</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Autonomous Navigation:</strong> Programmed with fully automated GPS patrol routes for hands-free perimeter monitoring.</li>
+                    <li><strong>Ground Control Integration:</strong> Seamless telemetry integration with ground control software for live flight-data monitoring.</li>
+                    <li><strong>Fire & Heat Detection:</strong> Equipped with an integrated Fire Detection Module utilizing IR flame sensors and thermal cameras to identify heat anomalies.</li>
+                    <li><strong>Automated Alert System:</strong> Engineered an instant alarm protocol that triggers alerts to security teams if a fire or unusual heat source is detected.</li>
+                    <li><strong>24/7 Operation:</strong> Upgraded with Night Vision/Low-Light capabilities for continuous operational readiness.</li>
+                </ul>`,
+                // Replace these with your actual image file names
+                images: [
+                    "images/Drone1.jpg", 
+                    "images/drone2.jpeg",
+                    "images/drone.jpg"
+                ], 
+                backLink: "robotics-projects.html"
+            },
+
+            "robo-soccer": {
+                title: "Autonomous Robo-Soccer Bot",
+                tags: ["Arduino", "Computer Vision", "Motor Control", "Sensors"],
+                video: "", 
+                description: `<p>An autonomous, omni-directional robot designed to compete in high-speed robotic soccer matches. This system relies on rapid processing of visual and spatial data to locate the ball, navigate the field, outmaneuver opponents, and score goals entirely without human intervention.</p>
+                
+                <h3 style="color: #bc13fe; margin-top: 2rem;">System Architecture</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Vision System:</strong> Integrates a Pixy2 / high-speed camera module to dynamically track the ball and goalposts via color signatures.</li>
+                    <li><strong>Omni-Directional Drive:</strong> Utilizes customized kinematics and omni-wheels for instantaneous lateral movement and rotation.</li>
+                    <li><strong>Tactical Logic:</strong> Programmed with state-machine logic to switch between offensive (striking) and defensive (positioning) modes based on sensor inputs.</li>
+                    <li><strong>Kicking Mechanism:</strong> Features a customized solenoid or servo-driven kicker for high-velocity shots.</li>
+                </ul>`,
+                
+                images: [
+                    "images/soccer1.jpg", 
+                    "images/soccer2.jpg",
+                    "images/NRC.jpg"
+                ],
+                backLink: "robotics-projects.html"
+            },
+
+            "line-follower": {
+                title: "Precision Line Following Robot",
+                tags: ["Microcontroller", "PID Tuning", "IR Sensors", "Hardware"],
+                video: "", 
+                description: `<p>A high-speed autonomous robot engineered to navigate complex track geometries with extreme precision. Built for robotics competitions, it utilizes an advanced sensor array and a finely-tuned control loop to stay precisely on track at maximum velocities, minimizing course completion time.</p>
+                
+                <h3 style="color: #bc13fe; margin-top: 2rem;">Engineering Highlights</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>PID Control Algorithm:</strong> Implemented a Proportional-Integral-Derivative (PID) algorithm in C++ to calculate error and apply smooth, continuous motor corrections rather than jerky movements.</li>
+                    <li><strong>High-Resolution Sensing:</strong> Utilizes an 8-channel IR reflectance sensor array (e.g., QTR-8A) to accurately map the line position beneath the chassis.</li>
+                    <li><strong>Dynamic Speed Adjustment:</strong> The logic automatically throttles speed on straightaways and decelerates for sharp curves or acute angles.</li>
+                    <li><strong>Auto-Calibration:</strong> Programmed an initial boot sequence that scans and calibrates the sensors to environmental lighting for flawless performance in any venue.</li>
+                </ul>`,
+                // Replace these with your actual image file names
+                images: [
+                    "images/lfr1.jpeg",
+                    "images/lfr2.jpeg"
+                ],
+                backLink: "robotics-projects.html"
+            }
+        };
+
+        // 2. GET THE ID FROM THE URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+
+        // 3. INJECT THE DATA
+        const project = projectsDatabase[projectId];
+
+        if (project) {
+            // Inject Title & Description
+            document.getElementById('proj-title').innerText = project.title;
+            document.getElementById('proj-desc').innerHTML = project.description;
+            
+            // Inject Tags
+            const tagsContainer = document.getElementById('proj-tags');
+            project.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.innerText = tag;
+                tagsContainer.appendChild(span);
+            });
+
+            // Handle Video (Show only if video link exists)
+            if (project.video !== "") {
+                document.getElementById('proj-video-container').style.display = 'block';
+                document.getElementById('proj-video').src = project.video;
+            }
+
+            // Inject Images
+            const imagesContainer = document.getElementById('proj-images');
+            project.images.forEach(imgSrc => {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = project.title + " Image";
+                imagesContainer.appendChild(img);
+            });
+
+            // Set the Back Button Link
+            document.getElementById('proj-back-btn').href = project.backLink;
+            
+        } else {
+            // Fallback if someone goes to a broken link
+            document.getElementById('proj-title').innerText = "Project Not Found";
+            document.getElementById('proj-desc').innerText = "System error: The requested project file could not be located in the database.";
+        }
+    </script>
+</body>
+</html>
