@@ -532,3 +532,289 @@ section { position: relative; }
     
     .footer-content { flex-direction: column; text-align: center; }
 }
+
+/* =========================================
+   AWARDS SECTION
+   ========================================= */
+.awards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.award-card {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 4px solid var(--neon-purple);
+    padding: 1.5rem;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.award-card:hover {
+    background: rgba(188, 19, 254, 0.05);
+    border-color: var(--neon-purple);
+    transform: translateX(10px);
+    box-shadow: -5px 5px 20px rgba(188, 19, 254, 0.15);
+}
+
+.award-icon {
+    font-size: 2.5rem;
+    color: var(--neon-purple);
+    margin-right: 1.5rem;
+    min-width: 60px;
+    text-align: center;
+}
+
+.award-content h3 {
+    color: var(--text-main);
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+}
+
+.award-meta {
+    display: block;
+    color: var(--neon-cyan);
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.award-content p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* =========================================
+   TRACK RECORD & MILESTONES (Neon Theme)
+   ========================================= */
+.track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.track-full-width {
+    grid-column: 1 / -1; 
+}
+
+.track-card {
+    display: flex;
+    align-items: flex-start;
+    background: var(--bg-card); /* Restored your preferred background */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 4px solid var(--neon-purple); /* Restored the neon purple side border */
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: 0.3s ease;
+}
+
+.track-card:hover {
+    background: rgba(188, 19, 254, 0.05);
+    border-color: var(--neon-purple);
+    transform: translateY(-5px);
+    box-shadow: -5px 5px 20px rgba(188, 19, 254, 0.15); /* Restored the purple glow */
+}
+
+/* Icon Box Styling */
+.track-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 1.5rem;
+    color: var(--neon-purple); /* Switched icons to neon purple */
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+}
+
+.track-content { flex-grow: 1; }
+
+.track-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 0.8rem;
+}
+
+.track-header h3 {
+    color: var(--text-main);
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Interactive Link Styling */
+.paper-link { color: inherit; text-decoration: none; transition: 0.3s ease; }
+.paper-link:hover { color: var(--neon-cyan); }
+.link-icon { font-size: 0.8rem; margin-left: 5px; color: var(--neon-cyan); opacity: 0; transition: 0.3s; }
+.track-card:hover .link-icon { opacity: 1; }
+
+/* Custom Status Badges */
+.track-badge {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    white-space: nowrap;
+}
+.badge-yellow { color: #ffd700; border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+.badge-green  { color: #00ff88; border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05); }
+.badge-red    { color: #ff4d4d; border-color: rgba(255, 77, 77, 0.3); background: rgba(255, 77, 77, 0.05); }
+.badge-teal   { color: #00d2ff; border-color: rgba(0, 210, 255, 0.3); background: rgba(0, 210, 255, 0.05); }
+
+.track-content p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 0; }
+
+/* Mobile Adjustments for Track Record */
+@media (max-width: 768px) {
+    .track-grid { grid-template-columns: 1fr; }
+    .track-card {
+        flex-direction: column;
+        border-left: 1px solid rgba(255, 255, 255, 0.05);
+        border-top: 4px solid var(--neon-purple); /* Shifts border to top on mobile */
+    }
+    .track-icon { margin-right: 0; margin-bottom: 1rem; }
+    .track-header { flex-direction: column; align-items: flex-start; }
+}
+
+/* =========================================
+   LIGHTBOX MODAL
+   ========================================= */
+.lightbox {
+    display: none; 
+    position: fixed;
+    z-index: 9999; /* Ensures it stays on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.95);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.lightbox-content-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 1000px;
+}
+
+#lightbox-img {
+    max-width: 100%;
+    max-height: 75vh;
+    border: 2px solid var(--neon-cyan);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+#lightbox-caption {
+    margin-top: 20px;
+    color: var(--neon-purple);
+    font-family: var(--font-code);
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.close-lightbox {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: var(--text-muted);
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10000;
+}
+
+.close-lightbox:hover { color: #ff4d4d; }
+
+.prev-lightbox, .next-lightbox {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--neon-cyan);
+    font-size: 30px;
+    cursor: pointer;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 5px;
+    transition: 0.3s;
+    z-index: 10000;
+}
+
+.prev-lightbox { left: 20px; }
+.next-lightbox { right: 20px; }
+
+.prev-lightbox:hover, .next-lightbox:hover {
+    background: var(--neon-cyan);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+/* =========================================
+   3D GALLERY TRIGGER
+   ========================================= */
+.gallery-3d-wrapper {
+    margin-top: 3rem;
+    text-align: center;
+    perspective: 1000px;
+    width: 100%;
+    
+    /* ADD THESE TWO LINES: */
+    position: relative;
+    z-index: 100; 
+}
+
+.gallery-3d-btn {
+    display: inline-block;
+    font-family: var(--font-code);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    animation: float3d 4s ease-in-out infinite; /* Continuous running animation */
+    transition: 0.3s ease;
+}
+
+/* The continuous floating and tilting 3D effect */
+@keyframes float3d {
+    0%, 100% { 
+        transform: translateY(0) rotateX(0deg) rotateY(-5deg); 
+        text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px rgba(0, 243, 255, 0.4);
+    }
+    50% { 
+        transform: translateY(-15px) rotateX(15deg) rotateY(5deg) translateZ(30px); 
+        text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 60px rgba(0, 243, 255, 0.6);
+        color: #fff; /* Flashes white at the peak of the animation */
+    }
+}
+
+.gallery-3d-btn:hover {
+    animation-play-state: paused; /* Stops floating when hovered so they can click */
+    color: var(--neon-purple);
+    text-shadow: 0 0 20px var(--neon-purple), 0 0 40px var(--neon-purple);
+    transform: scale(1.1) translateZ(50px);
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dumbwaiter 3D — Sona Pahar Resort</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#111827;color:#d1d5db;display:flex;height:100vh;overflow:hidden}
+
+/* ── Panel ── */
+#panel{width:320px;min-width:320px;background:#1e293b;border-right:1px solid #334155;overflow-y:auto;display:flex;flex-direction:column}
+#panel::-webkit-scrollbar{width:5px}
+#panel::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
+.panel-head{background:#0f172a;padding:12px 14px;position:sticky;top:0;z-index:10}
+.panel-head h1{font-size:14px;font-weight:800;color:#f59e0b;letter-spacing:.8px}
+.panel-head p{font-size:10px;color:#64748b;margin-top:2px}
+
+.sec{border-bottom:1px solid #334155}
+.sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f59e0b;padding:8px 14px;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;background:#1e293b;position:relative}
+.sec-title:hover{background:#263248}
+.sec-title::after{content:'▾';font-size:9px;transition:transform .2s}
+.sec.collapsed .sec-title::after{transform:rotate(-90deg)}
+.sec.collapsed .sec-body{display:none}
+.sec-body{padding:6px 14px 10px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px}
+
+.p{display:flex;flex-direction:column}
+.p.full{grid-column:1/-1}
+.p label{font-size:9px;color:#94a3b8;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p input[type=number]{background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:3px 5px;border-radius:3px;font-size:11px;font-family:'Consolas','Courier New',monospace;width:100%}
+.p input:focus{border-color:#f59e0b;outline:none}
+
+.p input[type=range]{width:100%;accent-color:#f59e0b;height:16px;margin-top:2px}
+
+.btn-row{padding:10px 14px;display:flex;gap:6px;background:#0f172a;position:sticky;bottom:0}
+.btn{flex:1;padding:7px;border:none;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
+.btn-primary{background:#f59e0b;color:#0f172a}
+.btn-primary:hover{background:#d97706}
+.btn-secondary{background:#334155;color:#94a3b8}
+.btn-secondary:hover{background:#475569;color:#fff}
+
+.toggle-row{display:flex;flex-wrap:wrap;gap:4px}
+.tbtn{font-size:9px;padding:3px 7px;border-radius:3px;border:1px solid #334155;background:#0f172a;color:#94a3b8;cursor:pointer;font-weight:600}
+.tbtn.on{background:#334155;color:#f59e0b;border-color:#f59e0b}
+
+/* ── Viewport ── */
+#vp{flex:1;position:relative}
+#vp canvas{display:block}
+.bar{position:absolute;bottom:0;left:0;right:0;background:rgba(15,23,42,.92);padding:5px 12px;font-size:10px;color:#64748b;display:flex;justify-content:space-between}
+.legend{position:absolute;top:8px;right:8px;background:rgba(30,41,59,.94);border:1px solid #334155;border-radius:5px;padding:8px 12px;font-size:10px}
+.legend div{display:flex;align-items:center;gap:5px;margin:2px 0}
+.dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <div class="panel-head">
+    <h1>DUMBWAITER 3D</h1>
+    <p>Pass-Through Workflow (Left/Right Rails)</p>
+  </div>
+
+  <!-- Tower -->
+  <div class="sec" id="s-tower">
+    <div class="sec-title">Tower Layout</div>
+    <div class="sec-body">
+      <div class="p"><label>Tower Outer W</label><input id="tW" type="number" value="1067"></div>
+      <div class="p"><label>Tower Outer D</label><input id="tD" type="number" value="864"></div>
+      <div class="p"><label>Total Height</label><input id="tH" type="number" value="6374"></div>
+      <div class="p"><label>Base Height</label><input id="tBaseH" type="number" value="500"></div>
+      <div class="p"><label>Level Spacing</label><input id="tLevelH" type="number" value="813"></div>
+      <div class="p"><label>Num Levels</label><input id="tLevels" type="number" value="6"></div>
+      <div class="p"><label>Min Floor (Y)</label><input id="cabMinY" type="number" value="1313"></div>
+      <div class="p"><label>Max Floor (Y)</label><input id="cabMaxY" type="number" value="4592"></div>
+      <div class="p"><label>Corner Post</label><input id="tTube" type="number" value="51"></div>
+    </div>
+  </div>
+
+  <!-- Cabinet -->
+  <div class="sec" id="s-cab">
+    <div class="sec-title">Cabin (Pass-Through)</div>
+    <div class="sec-body">
+      <div class="p"><label>Cabin Width</label><input id="cW" type="number" value="735"></div>
+      <div class="p"><label>Cabin Depth</label><input id="cD" type="number" value="838"></div>
+      <div class="p"><label>Cabin Height</label><input id="cH" type="number" value="762"></div>
+      <div class="p"><label>Lower Frame</label><input id="cLF" type="number" value="40"></div>
+      <div class="p"><label>Upper Frame</label><input id="cUF" type="number" value="20"></div>
+      <div class="p"><label>Side Sheet</label><input id="cSS" type="number" value="1.5" step="0.1"></div>
+    </div>
+  </div>
+
+  <!-- Motor -->
+  <div class="sec" id="s-motor">
+    <div class="sec-title">Traction Motor Top</div>
+    <div class="sec-body">
+      <div class="p full" style="font-size:9px;color:#64748b;margin-bottom:4px;">Gap is above cabin roof. Platform = MaxFloor + CabinH + Gap.</div>
+      <div class="p"><label>Gap from Roof</label><input id="motorGap" type="number" value="386"></div>
+      <div class="p"><label>Motor L (mm)</label><input id="mL" type="number" value="200"></div>
+      <div class="p"><label>Motor Dia (mm)</label><input id="mDia" type="number" value="120"></div>
+      <div class="p"><label>Brake Dia (mm)</label><input id="bkDia" type="number" value="100"></div>
+      <div class="p"><label>Drive Pulley Dia</label><input id="pDia" type="number" value="100"></div>
+      <div class="p"><label>EBox W (mm)</label><input id="ebW" type="number" value="300"></div>
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="sec collapsed" id="s-guide">
+    <div class="sec-title">Guide Rails &amp; Wheels</div>
+    <div class="sec-body">
+      <div class="p"><label>U-Chan Width</label><input id="uW" type="number" value="28"></div>
+      <div class="p"><label>U-Chan Depth</label><input id="uDep" type="number" value="20"></div>
+      <div class="p"><label>Wheel Dia</label><input id="wDia" type="number" value="40"></div>
+      <div class="p"><label>Wheel Width</label><input id="wWid" type="number" value="18"></div>
+    </div>
+  </div>
+
+  <!-- Counterweight -->
+  <div class="sec collapsed" id="s-cw">
+    <div class="sec-title">Counterweight</div>
+    <div class="sec-body">
+      <div class="p"><label>CW Width</label><input id="cwW" type="number" value="80"></div>
+      <div class="p"><label>CW Depth</label><input id="cwD" type="number" value="160"></div>
+      <div class="p"><label>CW Height</label><input id="cwH" type="number" value="420"></div>
+      <div class="p"><label>CW Offset (mm)</label><input id="cwOff" type="number" value="0"></div>
+    </div>
+  </div>
+
+  <!-- Visibility -->
+  <div class="sec" id="s-vis">
+    <div class="sec-title">Controls & Visibility</div>
+    <div class="sec-body">
+      <div class="p full">
+        <label>Live Cabin Position (Floor 1 to Top Floor)</label>
+        <input id="cabPos" type="range" min="0" max="100" value="100">
+      </div>
+      <div class="p full" style="margin-top:5px;">
+        <div class="toggle-row">
+          <button class="tbtn on" data-v="tower">Tower</button>
+          <button class="tbtn on" data-v="cabin">Cabin</button>
+          <button class="tbtn on" data-v="guides">Guides</button>
+          <button class="tbtn on" data-v="motor">Motor</button>
+          <button class="tbtn on" data-v="cw">C.Weight</button>
+          <button class="tbtn on" data-v="wire">Cable</button>
+          <button class="tbtn on" data-v="trays">Food Tray</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="btnRebuild">Rebuild</button>
+    <button class="btn btn-secondary" id="btnReset">Reset View</button>
+  </div>
+</div>
+
+<div id="vp">
+  <div class="legend">
+    <div><span class="dot" style="background:#3b82f6"></span> Tower (Front/Back Open)</div>
+    <div><span class="dot" style="background:#eab308"></span> Cabin (Pass-Through)</div>
+    <div><span class="dot" style="background:#22c55e"></span> Left & Right Rails</div>
+    <div><span class="dot" style="background:#a855f7"></span> Motor / Pulley System</div>
+    <div><span class="dot" style="background:#f97316"></span> Right Side CW</div>
+    <div><span class="dot" style="background:#fde68a"></span> Food Tray</div>
+  </div>
+  <div class="bar">
+    <span>LMB: Orbit &nbsp;|&nbsp; Scroll: Zoom &nbsp;|&nbsp; RMB: Pan</span>
+    <span id="info">—</span>
+  </div>
+</div>
+
+<script>
+// ── Globals ──
+var scene, camera, renderer, root;
+var camTheta = Math.PI*0.25, camPhi = Math.PI*0.4, camDist = 7000;
+var camTarget = new THREE.Vector3(0, 3000, 0);
+var dragging = false, panning = false, prev = {x:0,y:0};
+
+var vis = {tower:true,cabin:true,guides:true,motor:true,cw:true,wire:true,sheets:true,trays:true};
+
+// ── Materials ──
+var M = {
+  tower:  new THREE.MeshPhongMaterial({color:0x3b82f6, flatShading:true}),
+  frame:  new THREE.MeshPhongMaterial({color:0xeab308, flatShading:true}),
+  guide:  new THREE.MeshPhongMaterial({color:0x22c55e, flatShading:true}),
+  sheet:  new THREE.MeshPhongMaterial({color:0x94a3b8, side:THREE.DoubleSide, transparent:true, opacity:0.3}),
+  motor:  new THREE.MeshPhongMaterial({color:0xa855f7, flatShading:true}),
+  ebox:   new THREE.MeshPhongMaterial({color:0x6366f1, flatShading:true}),
+  brake:  new THREE.MeshPhongMaterial({color:0x7c3aed, flatShading:true}),
+  cw:     new THREE.MeshPhongMaterial({color:0xf97316, flatShading:true}),
+  tray:   new THREE.MeshPhongMaterial({color:0xfde68a, flatShading:true}),
+  wire:   new THREE.MeshPhongMaterial({color:0x9ca3af, flatShading:true}),
+  wheel:  new THREE.MeshPhongMaterial({color:0x6b7280, flatShading:true}),
+  ground: new THREE.MeshPhongMaterial({color:0x1e293b, side:THREE.DoubleSide})
+};
+
+// ── Helpers ──
+function V(id){ return parseFloat(document.getElementById(id).value)||0; }
+function box(w,h,d,mat){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);}
+
+function getP(){
+  var p = {
+    tW:V('tW'),tD:V('tD'),tH:V('tH'),tTube:V('tTube'),
+    tBaseH:V('tBaseH'),tLevelH:V('tLevelH'),tLevels:V('tLevels'),
+    cabMinY:V('cabMinY'),cabMaxY:V('cabMaxY'),motorGap:V('motorGap'),
+    cW:V('cW'),cD:V('cD'),cH:V('cH'),
+    cLF:V('cLF'),cUF:V('cUF'),cSS:V('cSS'),
+    uW:V('uW'),uDep:V('uDep'),wDia:V('wDia'),wWid:V('wWid'),
+    pDia:V('pDia'),mL:V('mL'),mDia:V('mDia'),bkDia:V('bkDia'),ebW:V('ebW'),
+    cwW:V('cwW'),cwD:V('cwD'),cwH:V('cwH'),cwOff:V('cwOff'),
+    cabPos:V('cabPos')
+  };
+
+  // Layout Logic: Cabin offset slightly Left, CW structurally placed on the Right
+  var innerW = p.tW - 2 * p.tTube;
+  
+  // Shift cabin left (leaving clearance from left wall)
+  p.cabX = -(innerW / 2) + (p.cW / 2) + 20;
+  
+  // Shift CW right (leaving clearance from right inner wall)
+  p.cwX = (innerW / 2) - (p.cwW / 2) - 20;
+  
+  p.cabZ = 0;
+  p.cwZ = 0;
+
+  // Platform Height: strictly above the TOP of the cabin at Max Floor
+  p.mPlatY = p.cabMaxY + p.cH + p.motorGap;
+
+  return p;
+}
+
+// ── Build Tower ──
+function buildTower(p,g){
+  var s=p.tTube, hw=p.tW/2, hd=p.tD/2, H=p.tH;
+  
+  // 4 Outer Corner Posts
+  var corners=[[-hw+s/2,-hd+s/2],[hw-s/2,-hd+s/2],[-hw+s/2,hd-s/2],[hw-s/2,hd-s/2]];
+  corners.forEach(function(c){
+    var post=box(s,H,s,M.tower);
+    post.position.set(c[0],H/2,c[1]);
+    g.add(post);
+  });
+
+  // Top Protective Shade/Roof (to protect motor & circuit board from rain)
+  var roofW = p.tW + 100; // 50mm overhang on each side
+  var roofD = p.tD + 100;
+  var roofY = H + 20; // Sits right at the top of the tower
+  var roof = box(roofW, 40, roofD, M.tower);
+  roof.position.set(0, roofY, 0);
+  g.add(roof);
+
+  // Calculate Cross Bracing Heights (Distribution Layers)
+  var ys = [0, p.mPlatY, H];
+  
+  for (var i = 0; i <= p.tLevels; i++) {
+    ys.push(p.tBaseH + i * p.tLevelH);
+  }
+  
+  ys = ys.filter(function(item, pos) { return ys.indexOf(item) == pos; }).sort(function(a, b) { return a - b; });
+
+  ys.forEach(function(y){
+    if (y > H) return; 
+    var lx=p.tW-2*s;
+    
+    // Front & back (Open access points)
+    [-hd+s/2,hd-s/2].forEach(function(z){
+      var b=box(lx,s,s,M.tower); b.position.set(0,y+s/2,z); g.add(b);
+    });
+    
+    // Left & right (Side walls)
+    var lz=p.tD-2*s;
+    [-hw+s/2,hw-s/2].forEach(function(x){
+      var b=box(s,s,lz,M.tower); b.position.set(x,y+s/2,0); g.add(b);
+    });
+  });
+}
+
+// ── Build Guide Rails ──
+function buildGuides(p,g){
+  var railH = p.mPlatY; 
+  var baseY = railH/2;
+  var uw=p.uW, ud=p.uDep, ut=2;
+
+  // This logic strictly places rails on the LEFT and RIGHT faces (x+ and x-)
+  function addRail(cx, cz, openDir){
+    var bw, bh=railH, bd;
+    if(openDir==='x+'||openDir==='x-'){
+      bw=ut; bd=uw;
+      var backX = cx - (openDir==='x+' ? ud/2-ut/2 : -ud/2+ut/2);
+      var bk = box(bw,bh,bd,M.guide); 
+      bk.position.set(backX, baseY, cz); 
+      g.add(bk);
+      
+      [-1,1].forEach(function(side){
+        var fl = box(ud-ut, bh, ut, M.guide);
+        fl.position.set(cx, baseY, cz + side*(uw/2-ut/2));
+        g.add(fl);
+      });
+    }
+  }
+
+  // Cabin side rails (Strictly Left and Right of cabin)
+  addRail(p.cabX - p.cW/2 - ud/2, p.cabZ, 'x+');
+  addRail(p.cabX + p.cW/2 + ud/2, p.cabZ, 'x-');
+
+  // CW side rails (Strictly Left and Right of counterweight)
+  addRail(p.cwX - p.cwW/2 - ud/2, p.cwZ, 'x+');
+  addRail(p.cwX + p.cwW/2 + ud/2, p.cwZ, 'x-');
+}
+
+// ── Build Cabin ──
+function buildCabin(p,g,cabY){
+  var cg=new THREE.Group();
+  var w=p.cW, d=p.cD, h=p.cH;
+  var lf=p.cLF, uf=p.cUF;
+
+  // Lower frame
+  var b1=box(w,lf,lf,M.frame); b1.position.set(0,lf/2,-d/2+lf/2); cg.add(b1);
+  var b2=box(w,lf,lf,M.frame); b2.position.set(0,lf/2,d/2-lf/2); cg.add(b2);
+  var b3=box(lf,lf,d-2*lf,M.frame); b3.position.set(-w/2+lf/2,lf/2,0); cg.add(b3);
+  var b4=box(lf,lf,d-2*lf,M.frame); b4.position.set(w/2-lf/2,lf/2,0); cg.add(b4);
+
+  // Top frame
+  var t1=box(w,uf,uf,M.frame); t1.position.set(0,h-uf/2,-d/2+uf/2); cg.add(t1);
+  var t2=box(w,uf,uf,M.frame); t2.position.set(0,h-uf/2,d/2-uf/2); cg.add(t2);
+  var t3=box(uf,uf,d-2*uf,M.frame); t3.position.set(-w/2+uf/2,h-uf/2,0); cg.add(t3);
+  var t4=box(uf,uf,d-2*uf,M.frame); t4.position.set(w/2-uf/2,h-uf/2,0); cg.add(t4);
+
+  // 4 posts
+  var postH=h-lf-uf;
+  var corners=[[-w/2+uf/2,-d/2+uf/2],[w/2-uf/2,-d/2+uf/2],[-w/2+uf/2,d/2-uf/2],[w/2-uf/2,d/2-uf/2]];
+  corners.forEach(function(c){
+    var vp=box(uf,postH,uf,M.frame);
+    vp.position.set(c[0],lf+postH/2,c[1]);
+    cg.add(vp);
+  });
+
+  if(vis.sheets){
+    // Left & Right walls only (Front/Back remain totally clear for loading)
+    var ls=box(p.cSS,postH,d-2*uf,M.sheet);
+    ls.position.set(-w/2+uf+p.cSS/2,lf+postH/2,0); cg.add(ls);
+    var rs=box(p.cSS,postH,d-2*uf,M.sheet);
+    rs.position.set(w/2-uf-p.cSS/2,lf+postH/2,0); cg.add(rs);
+    
+    // Internal shelves
+    for(var i=1;i<=3;i++){
+        var shelf = box(w-2*uf, 2, d-2*uf, M.sheet);
+        shelf.position.set(0, lf + i*(h/4), 0);
+        cg.add(shelf);
+    }
+  }
+
+  if(vis.trays){
+    // Food Tray: Maximum appropriate size
+    var trayW = w - 2*uf - 10; 
+    var trayD = d - 2*uf - 10; 
+    var tray = box(trayW, 10, trayD, M.tray);
+    
+    // Align tray to the left inside the cabin
+    var trayX = -w/2 + uf + 5 + trayW/2; 
+    tray.position.set(trayX, lf + 2*(h/4) + 6, 0); 
+    cg.add(tray);
+    
+    // Cup/Bowl on tray (also biased to the left)
+    var cup = new THREE.Mesh(new THREE.CylinderGeometry(20, 15, 30, 16), M.tray);
+    cup.position.set(trayX - trayW/4, lf + 2*(h/4) + 25, trayD/4);
+    cg.add(cup);
+  }
+
+  // Guide Wheels on Left and Right sides
+  var wheelGeo=new THREE.CylinderGeometry(p.wDia/2,p.wDia/2,p.wWid,16);
+  wheelGeo.rotateZ(Math.PI/2); 
+
+  var wheelY1=h*0.2, wheelY2=h*0.8;
+  var wheelXoff=w/2+p.wWid/2+2; 
+
+  [[-wheelXoff,wheelY1],[-wheelXoff,wheelY2],[wheelXoff,wheelY1],[wheelXoff,wheelY2]].forEach(function(pos){
+    var wh=new THREE.Mesh(wheelGeo,M.wheel);
+    wh.position.set(pos[0],pos[1],0);
+    cg.add(wh);
+  });
+
+  cg.position.set(p.cabX, cabY, p.cabZ);
+  g.add(cg);
+}
+
+// ── Build Motor Assembly (Accurate Mechanical Routing) ──
+function buildMotor(p,g){
+  var platH=10;
+  var s=p.tTube;
+  
+  // Platform
+  var plat=box(p.tW-2*s, platH, p.tD-2*s, M.tower);
+  plat.position.set(0, p.mPlatY+platH/2, 0);
+  g.add(plat);
+
+  var platTop = p.mPlatY + platH;
+  var pR = p.pDia / 2;
+  
+  // Heights and Alignments
+  var pulleyY = platTop + pR + 15; 
+  var pulleyX = p.cabX + pR; // Align left edge of pulley directly over cabin center
+  var pulleyZ = 0;
+
+  // Main Drive Sheave (Spins around Z axis to allow Left-Right cable run)
+  var pGeo = new THREE.CylinderGeometry(pR, pR, 40, 32);
+  pGeo.rotateX(Math.PI/2);
+  var pulley = new THREE.Mesh(pGeo, M.motor);
+  pulley.position.set(pulleyX, pulleyY, pulleyZ);
+  g.add(pulley);
+
+  // Motor Body
+  var mR = p.mDia / 2;
+  var motorGeo = new THREE.CylinderGeometry(mR, mR, p.mL, 32);
+  motorGeo.rotateX(Math.PI/2);
+  var motor = new THREE.Mesh(motorGeo, M.motor);
+  motor.position.set(pulleyX, pulleyY, pulleyZ - p.mL/2 - 25);
+  g.add(motor);
+
+  // Brake Assembly
+  var bkR = p.bkDia / 2;
+  var brakeGeo = new THREE.CylinderGeometry(bkR, bkR, 60, 32);
+  brakeGeo.rotateX(Math.PI/2);
+  var brake = new THREE.Mesh(brakeGeo, M.brake);
+  brake.position.set(pulleyX, pulleyY, pulleyZ + 50);
+  g.add(brake);
+
+  // Motor Base Frame
+  var frame = box(150, 15, 300, M.tower);
+  frame.position.set(pulleyX, platTop + 7.5, pulleyZ - 20);
+  g.add(frame);
+
+  // Deflection Pulley (Drops cable to CW on the right)
+  var defR = pR * 0.8;
+  var defPulleyX = p.cwX - defR; // Align right edge over CW center
+  var defPGeo = new THREE.CylinderGeometry(defR, defR, 30, 32);
+  defPGeo.rotateX(Math.PI/2);
+  var defPulley = new THREE.Mesh(defPGeo, M.motor);
+  defPulley.position.set(defPulleyX, pulleyY, pulleyZ);
+  g.add(defPulley);
+
+  // Control Box
+  var ebox=box(p.ebW, 400, 150, M.ebox);
+  // Placed on the motor floor (platTop) and pushed against the back-right wall
+  ebox.position.set(p.tW/2 - s - p.ebW/2 - 10, platTop + 200, -p.tD/2 + s + 75);
+  g.add(ebox);
+}
+
+// ── Build Counterweight ──
+function buildCW(p,g,cwY){
+  var cg = new THREE.Group();
+  
+  var cwBlock=box(p.cwW,p.cwH,p.cwD,M.cw);
+  cwBlock.position.set(0,p.cwH/2,0);
+  cg.add(cwBlock);
+
+  var cwWheelGeo=new THREE.CylinderGeometry(p.wDia/3,p.wDia/3,p.wWid*0.7,12);
+  cwWheelGeo.rotateZ(Math.PI/2);
+  var wOff = p.cwW/2 + p.wWid/2;
+  
+  [[-wOff,40],[wOff,40],[-wOff,p.cwH-40],[wOff,p.cwH-40]].forEach(function(pos){
+    var wh=new THREE.Mesh(cwWheelGeo,M.wheel);
+    wh.position.set(pos[0],pos[1],0);
+    cg.add(wh);
+  });
+
+  cg.position.set(p.cwX, cwY, p.cwZ);
+  g.add(cg);
+}
+
+// ── Build Cables ──
+function buildWire(p,g,cabY,cwY){
+  var platTop = p.mPlatY + 10;
+  var pR = p.pDia / 2;
+  var defR = pR * 0.8;
+  
+  var pulleyY = platTop + pR + 15;
+  var pulleyX = p.cabX + pR;
+  var defPulleyX = p.cwX - defR;
+
+  // 1. Cable dropping down to Cabin
+  var cabTopY = cabY + p.cH;
+  var dropX1 = p.cabX; // Off the left edge of the main pulley
+  var wireH1 = pulleyY - cabTopY;
+  if(wireH1 > 0){
+    var w1=box(3,wireH1,3,M.wire);
+    w1.position.set(dropX1, cabTopY + wireH1/2, 0);
+    g.add(w1);
+  }
+
+  // 2. Cable crossing horizontally between pulleys
+  var topY = pulleyY + pR;
+  var horizLen = defPulleyX - pulleyX;
+  if(horizLen > 0){
+    var wH = box(horizLen, 3, 3, M.wire);
+    wH.position.set(pulleyX + horizLen/2, topY, 0);
+    g.add(wH);
+  }
+
+  // 3. Cable dropping down to Counterweight
+  var cwTopY = cwY + p.cwH;
+  var dropX2 = p.cwX; // Off the right edge of deflection pulley
+  var wireH2 = pulleyY - cwTopY;
+  if(wireH2 > 0){
+    var w2=box(3,wireH2,3,M.wire);
+    w2.position.set(dropX2, cwTopY + wireH2/2, 0);
+    g.add(w2);
+  }
+}
+
+// ── Rebuild All ──
+function rebuild(){
+  if(root) scene.remove(root);
+  root=new THREE.Group();
+
+  var p=getP();
+
+  var travel = p.cabMaxY - p.cabMinY;
+  var cabY = p.cabMinY + (p.cabPos/100) * travel;
+  var cwFrac = p.cabPos/100; 
+  var cwY = p.cabMinY + p.cwOff + travel*(1-cwFrac);
+
+  if(vis.tower) buildTower(p,root);
+  if(vis.guides) buildGuides(p,root);
+  if(vis.cabin) buildCabin(p,root,cabY);
+  if(vis.motor) buildMotor(p,root);
+  if(vis.cw) buildCW(p,root,cwY);
+  if(vis.wire) buildWire(p,root,cabY,cwY);
+
+  // Ground
+  var gnd=new THREE.Mesh(new THREE.PlaneGeometry(8000,8000),M.ground);
+  gnd.rotation.x=-Math.PI/2; gnd.position.y=-2; root.add(gnd);
+
+  scene.add(root);
+
+  document.getElementById('info').textContent=
+    `Travel: ${p.cabMinY} to ${p.cabMaxY} | Pos: ${Math.round(p.cabPos)}%`;
+}
+
+// ── Camera ──
+function updateCam(){
+  camera.position.set(
+    camTarget.x+camDist*Math.sin(camPhi)*Math.cos(camTheta),
+    camTarget.y+camDist*Math.cos(camPhi),
+    camTarget.z+camDist*Math.sin(camPhi)*Math.sin(camTheta)
+  );
+  camera.lookAt(camTarget);
+}
+
+function resetView(){
+  camTheta=Math.PI*0.25; camPhi=Math.PI*0.4; camDist=7500;
+  camTarget.set(0,3000,0);
+  updateCam();
+}
+
+// ── Init ──
+function init(){
+  var vp=document.getElementById('vp');
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x111827);
+  scene.fog=new THREE.Fog(0x111827,14000,24000);
+
+  camera=new THREE.PerspectiveCamera(45,vp.clientWidth/vp.clientHeight,10,50000);
+  resetView();
+
+  renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(vp.clientWidth,vp.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  vp.insertBefore(renderer.domElement,vp.firstChild);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x404060,0.6));
+  var d1=new THREE.DirectionalLight(0xffffff,0.9);
+  d1.position.set(3000,8000,4000); scene.add(d1);
+  var d2=new THREE.DirectionalLight(0x8888ff,0.3);
+  d2.position.set(-2000,4000,-3000); scene.add(d2);
+  scene.add(new THREE.HemisphereLight(0x6688cc,0x443322,0.4));
+
+  // Grid
+  scene.add(new THREE.GridHelper(6000,30,0x334155,0x1e293b));
+
+  // Controls
+  var canvas=renderer.domElement;
+  canvas.addEventListener('mousedown',function(e){
+    if(e.button===0) dragging=true;
+    if(e.button===2) panning=true;
+    prev={x:e.clientX,y:e.clientY};
+  });
+  canvas.addEventListener('mousemove',function(e){
+    var dx=e.clientX-prev.x, dy=e.clientY-prev.y;
+    if(dragging){
+      camTheta-=dx*0.005;
+      camPhi=Math.max(0.05,Math.min(Math.PI-0.05,camPhi-dy*0.005));
+      updateCam();
+    }
+    if(panning){
+      var right=new THREE.Vector3();
+      camera.getWorldDirection(right);
+      right.cross(new THREE.Vector3(0,1,0)).normalize();
+      camTarget.addScaledVector(right,-dx*camDist*0.0003);
+      camTarget.y+=dy*camDist*0.0003;
+      updateCam();
+    }
+    prev={x:e.clientX,y:e.clientY};
+  });
+  canvas.addEventListener('mouseup',function(){dragging=false;panning=false;});
+  canvas.addEventListener('mouseleave',function(){dragging=false;panning=false;});
+  canvas.addEventListener('wheel',function(e){
+    camDist*=(1+e.deltaY*0.001);
+    camDist=Math.max(800,Math.min(28000,camDist));
+    updateCam();
+    e.preventDefault();
+  },{passive:false});
+  canvas.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+  // Resize
+  window.addEventListener('resize',function(){
+    camera.aspect=vp.clientWidth/vp.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(vp.clientWidth,vp.clientHeight);
+  });
+
+  // UI
+  document.querySelectorAll('.sec-title').forEach(function(el){
+    el.addEventListener('click',function(){
+      el.parentElement.classList.toggle('collapsed');
+    });
+  });
+
+  document.querySelectorAll('.tbtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var key=btn.getAttribute('data-v');
+      vis[key]=!vis[key];
+      btn.classList.toggle('on');
+      rebuild();
+    });
+  });
+
+  document.getElementById('btnRebuild').addEventListener('click',rebuild);
+  document.getElementById('btnReset').addEventListener('click',resetView);
+  document.getElementById('cabPos').addEventListener('input',rebuild);
+
+  rebuild();
+  (function loop(){requestAnimationFrame(loop);renderer.render(scene,camera);})();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -256,3 +256,84 @@ if(menuBtn && navMenu) {
         });
     });
 }
+
+// =========================================
+// LIGHTBOX GALLERY SYSTEM (3D TRIGGER)
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const lightbox = document.getElementById("lightbox-modal");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const closeBtn = document.querySelector(".close-lightbox");
+    const prevBtn = document.querySelector(".prev-lightbox");
+    const nextBtn = document.querySelector(".next-lightbox");
+    const trigger3D = document.getElementById("view-gallery-3d");
+
+    let currentImageIndex = 0;
+    
+    // 1. ADD YOUR IMAGES AND CAPTIONS HERE
+    // You can add as many as you want by copying the format.
+    const galleryData = [
+        { src: "images/NRC.jpg", caption: "Award Winner" },
+        { src: "images/agrobot-stall.jpeg", caption: "Showcase our project" },
+        { src: "images/innovation-fair.jpeg", caption: "Bangladesh Innovation Fair 2026" },
+        { src: "images/circuit-clash.jpeg", caption: "Circuit Clash Closing Ceremony" },
+        { src: "images/cricket.jpeg", caption: "Tournament Winning Trophy" }
+    ];
+
+    // 2. Open Lightbox when 3D text is clicked
+    if (trigger3D) {
+        trigger3D.addEventListener("click", () => {
+            currentImageIndex = 0; 
+            openLightbox();
+        });
+    }
+
+    function openLightbox() {
+        lightbox.style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent background scrolling
+        updateLightboxContent();
+    }
+
+    function closeLightbox() {
+        lightbox.style.display = "none";
+        document.body.style.overflow = "auto"; // Restore scrolling
+    }
+
+    function updateLightboxContent() {
+        lightboxImg.src = galleryData[currentImageIndex].src;
+        lightboxCaption.innerText = galleryData[currentImageIndex].caption;
+    }
+
+    function changeImage(direction) {
+        currentImageIndex += direction;
+        // Loop back to start or end
+        if (currentImageIndex >= galleryData.length) {
+            currentImageIndex = 0; 
+        } else if (currentImageIndex < 0) {
+            currentImageIndex = galleryData.length - 1; 
+        }
+        updateLightboxContent();
+    }
+
+    // 3. Event Listeners for Controls
+    if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
+    if (prevBtn) prevBtn.addEventListener("click", () => changeImage(-1));
+    if (nextBtn) nextBtn.addEventListener("click", () => changeImage(1));
+
+    // 4. Close when clicking the dark background outside the image
+    window.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // 5. Keyboard Navigation (Esc to close, Arrows to switch)
+    document.addEventListener("keydown", (e) => {
+        if (lightbox.style.display === "block") {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") changeImage(1);
+            if (e.key === "ArrowLeft") changeImage(-1);
+        }
+    });
+});
