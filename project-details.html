@@ -98,6 +98,32 @@
                 ],
                 backLink: "software-projects.html"
             },
+            "axon": {
+                title: "AXON: Smart Club Operations Platform",
+                tags: ["Next.js 16", "TypeScript", "PostgreSQL", "Tailwind v4"],
+                video: "", 
+                description: `<p>A comprehensive operations platform built for the AXON Robotics Club at Dhaka Residential Model College, designed to replace fragmented third-party tools like Google Forms. The platform manages festival directories, dynamic event registrations, custom form building, and secure QR-based check-ins at the door.</p>
+                
+                <h3 style="color: #bc13fe; margin-top: 2rem;">System Architecture & Features</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Concurrency Control:</strong> Capacity limits, deadlines, and duplicate entries are strictly enforced via database transactions with row locks, preventing race conditions during high-traffic registrations.</li>
+                    <li><strong>Dynamic UI & Filtering:</strong> Features debounced search and URL-synced filters (category, fee, entry type). Any filtered view is instantly shareable and survives page reloads.</li>
+                    <li><strong>Real-Time Dashboards:</strong> Event cards display live seats-remaining meters and ticking deadline countdowns. Fest statuses (Upcoming/Happening Now/Past) are computed dynamically on request to eliminate stale data.</li>
+                    <li><strong>Custom Registration & Ticketing:</strong> Organizers can build custom registration forms field-by-field. Approved participants receive server-rendered SVG QR tickets for in-browser camera scanning at the venue[cite: 13].</li>
+                </ul>
+
+                <h3 style="color: #bc13fe; margin-top: 2rem;">Tech Stack</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Framework:</strong> Next.js 16 (App Router) with React 19, utilizing Server Components to keep DB queries on the server[cite: 13].</li>
+                    <li><strong>Language:</strong> TypeScript (Strict mode) for zero-error typechecking across the project[cite: 13].</li>
+                    <li><strong>Database & Client:</strong> PostgreSQL (Supabase) accessed via postgres.js (Tagged-template SQL)[cite: 13].</li>
+                    <li><strong>Security:</strong> Hand-rolled JWT authentication (jose + bcryptjs) and Zod for unified client/server schema validation[cite: 13].</li>
+                    <li><strong>Styling & UI:</strong> Tailwind CSS v4 utilizing semantic CSS custom properties for seamless theming, alongside hand-written SVG charts for total rendering control[cite: 13].</li>
+                    <li><strong>Live Link:</strong> <a href="https://axon-robotics-club.vercel.app/" target="_blank" style="color: var(--neon-cyan);">axon-robotics-club.vercel.app/</a></li>
+                </ul>`,
+                images: ["images/axon.png"], // Add a screenshot of AXON to your images folder
+                backLink: "software-projects.html"
+            },
             "drone": {
                 title: "Autonomous Surveillance Drone",
                 tags: ["Robotics", "IoT", "Telemetry", "Computer Vision", "C++"],
