@@ -274,6 +274,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. ADD YOUR IMAGES AND CAPTIONS HERE
     // You can add as many as you want by copying the format.
     const galleryData = [
+        { src: "images/DSC05178.jpg", caption: "NRC 2026 LFR Champion — Stage Award Ceremony (1st of 120 Teams)" },
+        { src: "images/Award-display.png", caption: "NRC 2026 Champion Crest, Prize Check & Certificates" },
         { src: "images/NRC.jpg", caption: "Award Winner" },
         { src: "images/agrobot-stall.jpeg", caption: "Showcase our project" },
         { src: "images/innovation-fair.jpeg", caption: "Bangladesh Innovation Fair 2026" },
